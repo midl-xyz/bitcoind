@@ -2,7 +2,9 @@ name: Build & Publish
 description: Build and publish Docker image to Amazon ECR
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
