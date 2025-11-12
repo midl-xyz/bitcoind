@@ -8,7 +8,7 @@ RUN apt-get update -y \
   && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG TARGETPLATFORM
-ENV BITCOIN_VERSION=29.0
+ENV BITCOIN_VERSION=30.0
 ENV SIGS_REPO_URL="https://github.com/bitcoin-core/guix.sigs.git"
 ENV SIGS_CLONE_DIR="guix.sigs"
 ENV TMPDIR="/tmp/bitcoin_verify_binaries"
@@ -17,10 +17,10 @@ COPY verify-${BITCOIN_VERSION}.py .
 
 RUN set -ex \
   && if echo $BITCOIN_VERSION | grep -q "rc" ; then \
-  VERIFY_VERSION=$(echo $BITCOIN_VERSION | sed 's/\(.*\)rc\([0-9]*\)/\1-rc\2/'); \
-  else \
-  VERIFY_VERSION=$BITCOIN_VERSION; \
-  fi \
+       VERIFY_VERSION=$(echo $BITCOIN_VERSION | sed 's/\(.*\)rc\([0-9]*\)/\1-rc\2/'); \
+     else \
+       VERIFY_VERSION=$BITCOIN_VERSION; \
+     fi \
   && echo "$VERIFY_VERSION" \
   && if [ "${TARGETPLATFORM}" = "linux/amd64" ]; then export TARGETPLATFORM=x86_64-linux-gnu; fi \
   && if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then export TARGETPLATFORM=aarch64-linux-gnu; fi \
@@ -28,8 +28,8 @@ RUN set -ex \
   && git clone ${SIGS_REPO_URL} ${SIGS_CLONE_DIR} \
   && gpg --import "${SIGS_CLONE_DIR}"/builder-keys/* \
   && ./verify-${BITCOIN_VERSION}.py \
-  --min-good-sigs 6 pub "${VERIFY_VERSION}-linux" \
-  && tar -xzf "${TMPDIR}.${VERIFY_VERSION}-linux/bitcoin-${BITCOIN_VERSION}-${TARGETPLATFORM}.tar.gz" -C /opt \
+    --min-good-sigs 6 pub "${VERIFY_VERSION}-${TARGETPLATFORM}" \
+  && tar -xzf "${TMPDIR}.${VERIFY_VERSION}-${TARGETPLATFORM}/bitcoin-${BITCOIN_VERSION}-${TARGETPLATFORM}.tar.gz" -C /opt \
   && rm -rf ${SIGS_CLONE_DIR} \
   && rm -rf ${TMPDIR} \
   && rm -rf /opt/bitcoin-${BITCOIN_VERSION}/bin/bitcoin-qt
@@ -41,15 +41,15 @@ ARG UID=101
 ARG GID=101
 
 ENV BITCOIN_DATA=/home/bitcoin/.bitcoin
-ENV BITCOIN_VERSION=29.0
+ENV BITCOIN_VERSION=30.0
 ENV PATH=/opt/bitcoin-${BITCOIN_VERSION}/bin:$PATH
 
 RUN groupadd --gid ${GID} bitcoin \
   && if echo "$BITCOIN_VERSION" | grep -q "rc"; then \
-  PADDED_VERSION=$(echo $BITCOIN_VERSION | sed 's/\([0-9]\+\)\.\([0-9]\+\)rc/\1.\2.0rc/'); \
-  else \
-  PADDED_VERSION=$BITCOIN_VERSION; \
-  fi \
+       PADDED_VERSION=$(echo $BITCOIN_VERSION | sed 's/\([0-9]\+\)\.\([0-9]\+\)rc/\1.\2.0rc/'); \
+     else \
+       PADDED_VERSION=$BITCOIN_VERSION; \
+     fi \
   && echo "Padded version: $PADDED_VERSION" \
   && useradd --create-home --no-log-init -u ${UID} -g ${GID} bitcoin \
   && apt-get update -y \

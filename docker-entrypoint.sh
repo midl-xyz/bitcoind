@@ -20,8 +20,10 @@ fi
 if [ "$(echo "$1" | cut -c1)" = "-" ] || [ "$1" = "bitcoind" ]; then
   mkdir -p "$BITCOIN_DATA"
   chmod 700 "$BITCOIN_DATA"
-  chown -R bitcoin:bitcoin "$(getent passwd bitcoin | cut -d: -f6)" || true
-  chown -R bitcoin:bitcoin "$BITCOIN_DATA" || true
+  # Fix permissions for home dir.
+  chown -R bitcoin:bitcoin "$(getent passwd bitcoin | cut -d: -f6)"
+  # Fix permissions for bitcoin data dir.
+  chown -R bitcoin:bitcoin "$BITCOIN_DATA"
 
   echo "$0: setting data directory to $BITCOIN_DATA"
 

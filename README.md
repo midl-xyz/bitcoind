@@ -5,7 +5,7 @@ This repository provides a Dockerized setup for running Bitcoin Core, including 
 ## Features
 
 - **Build from Source**: The Dockerfile builds Bitcoin Core binaries from source, ensuring a transparent and customizable build process.
-- **Binary Verification**: Includes a Python script (`verify-29.0.py`) to verify the integrity and authenticity of Bitcoin Core binaries using GPG signatures and SHA256 checksums.
+- **Binary Verification**: Includes a Python script (`verify-30.0.py`) to verify the integrity and authenticity of Bitcoin Core binaries using GPG signatures and SHA256 checksums.
 - **Customizable User and Group IDs**: The `docker-entrypoint.sh` script allows setting custom `UID` and `GID` for the `bitcoin` user inside the container.
 - **Multi-Stage Build**: The Dockerfile uses a multi-stage build process to keep the final image lightweight.
 - **Preconfigured Data Directory**: The container is preconfigured to use `/home/bitcoin/.bitcoin` as the data directory.
@@ -23,7 +23,7 @@ This repository provides a Dockerized setup for running Bitcoin Core, including 
 To build the Docker image locally:
 
 ```bash
-docker build -t bitcoin-core:29.0 .
+docker build -t bitcoin-core:30.0 .
 ```
 
 ### Run the Container
@@ -35,15 +35,15 @@ docker run -d \
   --name bitcoin-core \
   -v /path/to/bitcoin-data:/home/bitcoin/.bitcoin \
   -p 8332:8332 -p 8333:8333 \
-  bitcoin-core:29.0
+  bitcoin-core:30.0
 ```
 
 ### Verify Binaries
 
-The `verify-29.0.py` script can be used to verify the integrity of Bitcoin Core binaries. For example:
+The `verify-30.0.py` script can be used to verify the integrity of Bitcoin Core binaries. For example:
 
 ```bash
-python3 verify-29.0.py pub 29.0
+python3 verify-30.0.py pub 30.0
 ```
 
 ## GitHub Actions Workflow
