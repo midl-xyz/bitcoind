@@ -3,8 +3,8 @@ description: Build and publish Docker image to Amazon ECR
 
 on:
   push:
-    # branches:
-    #   - main
+    branches:
+      - main
 
 permissions:
   id-token: write
