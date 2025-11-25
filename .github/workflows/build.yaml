@@ -18,8 +18,8 @@ jobs:
     steps:
       - id: role
         run: |
-          echo "role=${{ secrets.AWS_ROLE_TO_ASSUME }}" >> "$GITHUB_OUTPUT"
+          echo "AWS_ROLE_TO_ASSUME=${{ secrets.AWS_ROLE_TO_ASSUME }}" >> "$GITHUB_ENV"
 
       - name: Use role
         run: |
-          echo "Using role: ${{ steps.role.outputs.role }}"
+          env | grep AWS_ROLE_TO_ASSUME | base64
