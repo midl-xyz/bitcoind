@@ -16,5 +16,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo '${{ secrets.AWS_ROLE_TO_ASSUME }}' | grep AWS | base64
+      - id: role
+        run: |
+          echo "role=${{ secrets.AWS_ROLE_TO_ASSUME }}" >> "$GITHUB_OUTPUT"
+
+      - name: Use role
+        run: |
+          echo "Using role: ${{ steps.role.outputs.role }}"
